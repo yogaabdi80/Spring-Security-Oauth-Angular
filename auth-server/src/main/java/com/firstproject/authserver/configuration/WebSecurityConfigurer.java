@@ -49,7 +49,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http	
 				.addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
-				.antMatchers("/user/register","/user/verify/email","/user/forgot-password","/user/change-password").permitAll()
+				.antMatchers("/user/register","/user/verify/email","/user/forgot-password","/user/change-password","/user/getToken").permitAll()
 				.anyRequest().authenticated()
 				.and().oauth2Login().successHandler(oauth2authSuccessHandler)
 				.and().logout().logoutSuccessHandler(new LogoutHandler())

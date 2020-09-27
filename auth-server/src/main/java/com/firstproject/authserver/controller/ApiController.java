@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,11 +49,17 @@ public class ApiController {
 		return res;
 	}
 
-	@GetMapping("/getToken")
-	public TokenResp getToken(HttpServletRequest req) {
-		TokenResp authenticationResponse = proxy.getToken("Basic Y2xpZW50YXV0aGNvZGU6YWJjZA==",
-				"authorization_code", req.getQueryString().split("=")[1], "http://localhost:8081/auth/server/user/getToken");
-		return authenticationResponse;
+	@PostMapping("/getToken")
+	public Response<TokenResp> getToken(@RequestParam String code) {
+		TokenResp authenticationResponse = null;
+		try {
+			authenticationResponse = proxy.getToken("Basic Y2xpZW50YXV0aGNvZGU6YWJjZA==",
+					"authorization_code", code, "http://localhost:4200/dashboard");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Response<TokenResp>("Token Gagal Diterima!",99,authenticationResponse);
+		}
+		return new Response<TokenResp>("Token Berhasil Diterima!",200,authenticationResponse);
 	}
 	
 	@PostMapping("/register")
