@@ -1,0 +1,296 @@
+<div class="container">
+  <form action="" class="form-horizontal" #form="ngForm" (ngSubmit)="save()">
+    <div class="card">
+      <div class="card-header bg-dark text-white">
+        <b>Tambah Produk</b>
+      </div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label for="foto1" class="col-md-3 col-form-label"
+            >Foto Produk 1 (Thumbnail)</label
+          >
+          <div class="col-md-4">
+            <input
+              type="file"
+              class="form-control-file"
+              (change)="readerImage($event, 'foto1')"
+              id="fotoProduk1"
+              name="fotoProduk1"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || fotoProduk1.touched) && fotoProduk1.invalid
+              }"
+              [(ngModel)]="fotoProduk"
+              (input)="validateFile()"
+              #fotoProduk1="ngModel"
+            />
+            <div
+              *ngIf="
+                (form.submitted || fotoProduk1.touched) && fotoProduk1.invalid
+              "
+              class="invalid-feedback"
+            >
+              Harap Masukkan Foto Produk
+            </div>
+          </div>
+          <div class="col-md">
+            <img
+              [src]="fileProduk.urlfoto1"
+              alt="Foto Produk1"
+              height="150px"
+              width="170px"
+              *ngIf="fileProduk.urlfoto1"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="foto2" class="col-md-3 col-form-label"
+            >Foto Produk 2</label
+          >
+          <div class="col-md-4">
+            <input
+              type="file"
+              class="form-control-file"
+              (change)="readerImage($event, 'foto2')"
+              id="foto2"
+              name="foto2"
+            />
+          </div>
+          <div class="col-md">
+            <img
+              [src]="fileProduk.urlfoto2"
+              alt="Foto Produk2"
+              height="150px"
+              width="170px"
+              *ngIf="fileProduk.urlfoto2"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="foto3" class="col-md-3 col-form-label"
+            >Foto Produk 3</label
+          >
+          <div class="col-md-4">
+            <input
+              type="file"
+              class="form-control-file"
+              (change)="readerImage($event, 'foto3')"
+              id="foto3"
+              name="foto3"
+            />
+          </div>
+          <div class="col-md">
+            <img
+              [src]="fileProduk.urlfoto3"
+              alt="Foto Produk3"
+              height="150px"
+              width="170px"
+              *ngIf="fileProduk.urlfoto3"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="foto4" class="col-md-3 col-form-label"
+            >Foto Produk 4</label
+          >
+          <div class="col-md-4">
+            <input
+              type="file"
+              class="form-control-file"
+              id="foto4"
+              name="foto4"
+              (change)="readerImage($event, 'foto4')"
+            />
+          </div>
+          <div class="col-md">
+            <img
+              [src]="fileProduk.urlfoto4"
+              alt="Foto Produk4"
+              height="150px"
+              width="170px"
+              *ngIf="fileProduk.urlfoto4"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="foto5" class="col-md-3 col-form-label"
+            >Foto Produk 5</label
+          >
+          <div class="col-md-4">
+            <input
+              type="file"
+              class="form-control-file"
+              id="foto5"
+              name="foto5"
+              (change)="readerImage($event, 'foto5')"
+            />
+          </div>
+          <div class="col-md">
+            <img
+              [src]="fileProduk.urlfoto5"
+              alt="Foto Produk5"
+              height="150px"
+              width="170px"
+              *ngIf="fileProduk.urlfoto5"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="judulProduk" class="col-md-3 col-form-label"
+            >Judul Produk</label
+          >
+          <div class="col-md-4">
+            <input
+              required
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || namaProduk.touched) && namaProduk.invalid
+              }"
+              id="namaProduk"
+              name="namaProduk"
+              [(ngModel)]="produk.namaProduk"
+              #namaProduk="ngModel"
+            />
+            <div
+              *ngIf="
+                (form.submitted || namaProduk.touched) && namaProduk.invalid
+              "
+              class="invalid-feedback"
+            >
+              Judul Produk Harap Diisi!
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="hargaProduk" class="col-md-3 col-form-label">Harga</label>
+          <div class="col-md-4 input-group">
+            <div class="input-group-append">
+              <span class="input-group-text">Rp.</span>
+            </div>
+            <input
+              required
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || hargaProduk.touched) && hargaProduk.invalid
+              }"
+              id="hargaProduk"
+              name="hargaProduk"
+              [(ngModel)]="separator"
+              (blur)="setSeparator()"
+              (focus)="clearSeparator()"
+              #hargaProduk="ngModel"
+            />
+            <div
+              *ngIf="
+                (form.submitted || hargaProduk.touched) && hargaProduk.invalid
+              "
+              class="invalid-feedback"
+            >
+              Harga Harap Diisi!
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="kategoriProduk" class="col-md-3 col-form-label"
+            >Kategori</label
+          >
+          <div class="col-md-4">
+            <select
+              required
+              name="kategoriProduk"
+              id="kategoriProduk"
+              [(ngModel)]="produk.kdKategori"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || kategoriProduk.touched) &&
+                  kategoriProduk.invalid
+              }"
+              #kategoriProduk="ngModel"
+            >
+              <option [ngValue]="null">Pilih Kategori</option>
+              <option [ngValue]="'K001'">Komputer</option>
+              <option [ngValue]="'K002'">Laptop</option>
+              <option [ngValue]="'K003'">Handphone</option>
+            </select>
+            <div
+              *ngIf="
+                (form.submitted || kategoriProduk.touched) &&
+                kategoriProduk.invalid
+              "
+              class="invalid-feedback"
+            >
+              Kategori Harap Diisi!
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="stokProduk" class="col-md-3 col-form-label">Stok</label>
+          <div class="col-md-4">
+            <input
+              required
+              type="number"
+              class="form-control"
+              id="stokProduk"
+              name="stokProduk"
+              [(ngModel)]="produk.stokProduk"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || stokProduk.touched) && stokProduk.invalid
+              }"
+              #stokProduk="ngModel"
+            />
+            <div
+              *ngIf="
+                (form.submitted || stokProduk.touched) && stokProduk.invalid
+              "
+              class="invalid-feedback"
+            >
+              Stok Harap Diisi!
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label">Deskripsi Produk</label>
+          <div class="col-md-4">
+            <ckeditor
+              required
+              tagName="textarea"
+              [editor]="Editor"
+              [(ngModel)]="produk.deskripsiProduk"
+              id="deskripsiProduk"
+              name="deskripsiProduk"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || deskripsiProduk.touched) &&
+                  deskripsiProduk.invalid
+              }"
+              #deskripsiProduk="ngModel"
+            ></ckeditor>
+            <div
+              *ngIf="
+                (form.submitted || deskripsiProduk.touched) &&
+                deskripsiProduk.invalid
+              "
+              class="invalid-feedback"
+            >
+              Deskripsi Produk Harap Diisi!
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row float-right">
+          <div class="col-md">
+            <button class="btn btn-danger mr-2" type="button" (click)="this.router.navigate(['home'])">Kembali</button>
+            <button class="btn btn-success" type="submit">Simpan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

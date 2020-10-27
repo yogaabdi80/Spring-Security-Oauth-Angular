@@ -1,0 +1,136 @@
+<div class="container-fluid">
+  <div class="row">
+    <h4 class="mr-4">Urutkan Menurut :</h4>
+    <div class="btn-group btn-group-toggle mr-3">
+      <label class="btn-outline-dark" ngbButtonLabel>
+        <input
+          type="checkbox"
+          ngbButton
+          [(ngModel)]="sortByFilter.nama"
+          (change)="sortFilterFunction($event)"
+          value="namaProduk,"
+        />
+        Nama Produk
+      </label>
+      <label class="btn-outline-dark" ngbButtonLabel>
+        <input
+          type="checkbox"
+          ngbButton
+          [(ngModel)]="sortByFilter.harga"
+          (change)="sortFilterFunction($event)"
+          value="hargaProduk,"
+        />
+        Harga
+      </label>
+      <label class="btn-outline-dark" ngbButtonLabel>
+        <input
+          type="checkbox"
+          ngbButton
+          [(ngModel)]="sortByFilter.stok"
+          (change)="sortFilterFunction($event)"
+          value="stokProduk,"
+        />
+        Stok
+      </label>
+    </div>
+    <div
+      class="btn-group btn-group-toggle"
+      ngbRadioGroup
+      name="radioBasic"
+      [(ngModel)]="sortByFilter.sortType"
+      *ngIf="sortByFilter.stok || sortByFilter.harga || sortByFilter.nama"
+    >
+      <label ngbButtonLabel class="btn-outline-dark">
+        <input
+          ngbButton
+          type="radio"
+          value="asc"
+          (change)="sortFilterFunction(null)"
+        />
+        Asc
+      </label>
+      <label ngbButtonLabel class="btn-outline-dark">
+        <input
+          ngbButton
+          type="radio"
+          value="desc"
+          (change)="sortFilterFunction(null)"
+        />
+        Desc
+      </label>
+    </div>
+  </div>
+</div>
+<hr />
+<div class="row row-cols-1 row-cols-md-5">
+  <div *ngFor="let item of produkList" class="col-md mb-4">
+    <div class="card">
+      <img
+        [src]="item.image"
+        class="card-img-top"
+        alt="{{ item.fotoProduk1 }}"
+        *ngIf="item.image"
+        height="200rem"
+      />
+      <img
+        src="../../assets/img/blank-profile-picture.jpg"
+        class="card-img-top"
+        alt="{{ item.fotoProduk1 }}"
+        *ngIf="!item.fotoProduk1"
+        height="200rem"
+      />
+      <div class="card-body">
+        <p
+          class="card-text crop-text"
+          style="font-size: 0.9rem; height: 2.5rem"
+        >
+          <b> {{ item.namaProduk }}</b>
+        </p>
+        <p class="card-text" style="font-size: 0.9rem; height: 2.5rem">
+          <b> Rp. {{ item.hargaProduk | number }}</b>
+        </p>
+        <p class="text-muted" style="font-size: 0.9rem">
+          {{ "Stok : " + item.stokProduk }}
+        </p>
+        <a
+          class="stretched-link"
+          (click)="this.router.navigate(['produk', item.id])"
+        ></a>
+      </div>
+    </div>
+  </div>
+</div>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [ngClass]="{ disabled: page === 1 }">
+      <a class="page-link" (click)="previousTab()">Previous</a>
+    </li>
+    <li
+      class="page-item"
+      [ngClass]="{ active: pageNumber1 === page }"
+      (click)="clickPage(pageNumber1, 1)"
+      *ngIf="totalPage > 0"
+    >
+      <a class="page-link">{{ pageNumber1 }}</a>
+    </li>
+    <li
+      class="page-item"
+      [ngClass]="{ active: pageNumber2 === page }"
+      (click)="clickPage(pageNumber2, 2)"
+      *ngIf="totalPage > 1"
+    >
+      <a class="page-link">{{ pageNumber2 }}</a>
+    </li>
+    <li
+      class="page-item"
+      [ngClass]="{ active: pageNumber3 === page }"
+      (click)="clickPage(pageNumber3, 3)"
+      *ngIf="totalPage > 2"
+    >
+      <a class="page-link">{{ pageNumber3 }}</a>
+    </li>
+    <li class="page-item" [ngClass]="{ disabled: page === totalPage }">
+      <a class="page-link" (click)="nextTab()">Next</a>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md mh-100 mw-100">
+      <h4 class="d-flex align-items-center mb-3 mr-3">
+        <span class="text-muted"
+          >Your cart
+          <span class="badge badge-secondary badge-pill">{{cartList.length}}</span></span
+        >
+      </h4>
+      <ul class="list-group mb-3">
+        <li
+          class="list-group-item d-flex justify-content-between lh-condensed"
+          *ngFor="let item of cartList"
+        >
+          <div class="container">
+            <div class="row">
+              <img
+                [src]="item.urlfotoProduk1"
+                alt="produk1"
+                height="90px"
+                width="90px"
+                class="mr-1"
+              />
+              <div class="media-body">
+                <h6 class="my-0 crop-text">{{ item.namaProduk }}</h6>
+                <small class="text-muted"
+                  >Rp. {{ item.hargaProduk | number }}</small
+                >
+                <br />
+                <div class="mt-3">
+                  <a (click)="decPrice(item)" class="mx-1"
+                    ><i class="fa fa-minus-circle" aria-hidden="true"></i
+                  ></a>
+                  <input
+                    [(ngModel)]="item.jumlahItem"
+                    type="number"
+                    name="jumlahItem"
+                    id="jumlahItem"
+                    class="text-center mx-0"
+                    style="width: 2rem"
+                  />
+                  <a (click)="incPrice(item)" class="mx-1"
+                    ><i class="fa fa-plus-circle" aria-hidden="true"></i
+                  ></a>
+                  <span class="mx-1"
+                    ><button class="btn-sm btn-danger" (click)="delete(item.id)">
+                      <i class="fas fa-trash fa-sm"></i></button
+                  ></span>
+                </div>
+              </div>
+              <h6 class="my-1">Harga : Rp. {{ item.hargaProduk * item.jumlahItem | number }}</h6>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row float-right" *ngIf="cartList.length>0">
+    <div class="col-md">
+      <button class="btn btn-success" (click)="checkout()">Checkout</button>
+    </div>
+  </div>
+</div>

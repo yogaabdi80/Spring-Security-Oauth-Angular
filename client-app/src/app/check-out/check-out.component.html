@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+        <span class="badge badge-secondary badge-pill">{{cartList.length}}</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let item of cartList">
+          <img
+            [src]="item.urlfotoProduk1"
+            alt="produk1"
+            height="75px"
+            width="75px"
+            class="mr-1"
+          />
+          <div class="media-body">
+            <p class="my-0" style="font-size: 0.8rem;"><b>{{item.namaProduk}}</b></p>
+            <small class="text-muted">Jumlah : {{item.jumlahItem}}</small>
+          </div>
+          <span class="text-muted " style="font-size: 0.8rem;">Rp. {{item.hargaProduk*item.jumlahItem|number}}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between" style="font-size: 0.8rem;">
+          <span>Total</span>
+          <strong>Rp. {{sum|number}}</strong>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3">Alamat Pengiriman</h4>
+      <form class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="address">Alamat</label>
+          <input type="text" class="form-control" id="address" required />
+          <div class="invalid-feedback">
+            Please enter your shipping address.
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-5 mb-3">
+            <label for="country">Kelurahan</label>
+            <input type="text" class="form-control" id="address" required />
+            <div class="invalid-feedback">Please select a valid country.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="state">Kecamatan</label>
+            <input type="text" class="form-control" id="address" required />
+            <div class="invalid-feedback">Please provide a valid state.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="state">Kota / Kabupaten</label>
+            <input type="text" class="form-control" id="address" required />
+            <div class="invalid-feedback">Please provide a valid state.</div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="zip">Kode Pos</label>
+            <input
+              type="text"
+              class="form-control"
+              id="zip"
+              placeholder=""
+              required
+            />
+            <div class="invalid-feedback">Zip code required.</div>
+          </div>
+        </div>
+        <hr class="mb-4" />
+
+        <button class="btn btn-success btn-md btn-block" type="submit">
+          Beli
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

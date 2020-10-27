@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-4">
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-ride="carousel"
+        data-interval="0"
+      >
+        <ol class="carousel-indicators">
+          <li
+            data-target="#carouselExampleIndicators"
+            data-slide-to="0"
+            class="active"
+          ></li>
+          <li
+            data-target="#carouselExampleIndicators"
+            data-slide-to="1"
+            *ngIf="
+              produk.fotoProduk2 ||
+              produk.fotoProduk3 ||
+              produk.fotoProduk4 ||
+              produk.fotoProduk5
+            "
+          ></li>
+          <li
+            data-target="#carouselExampleIndicators"
+            data-slide-to="2"
+            *ngIf="
+              (produk.fotoProduk2 &&
+                (produk.fotoProduk3 ||
+                  produk.fotoProduk4 ||
+                  produk.fotoProduk5)) ||
+              (produk.fotoProduk3 &&
+                (produk.fotoProduk4 || produk.fotoProduk5)) ||
+              (produk.fotoProduk4 && produk.fotoProduk5)
+            "
+          ></li>
+          <li
+            data-target="#carouselExampleIndicators"
+            data-slide-to="3"
+            *ngIf="
+              (produk.fotoProduk2 || produk.fotoProduk3) &&
+              (produk.fotoProduk4 || produk.fotoProduk5)
+            "
+          ></li>
+          <li
+            data-target="#carouselExampleIndicators"
+            data-slide-to="4"
+            *ngIf="
+              produk.fotoProduk2 &&
+              produk.fotoProduk3 &&
+              produk.fotoProduk4 &&
+              produk.fotoProduk5
+            "
+          ></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              class="d-block w-100"
+              [src]="imgProduk1"
+              alt="FotoProduk1"
+              height="250px"
+            />
+          </div>
+          <div class="carousel-item" *ngIf="produk.fotoProduk2">
+            <img
+              class="d-block w-100"
+              [src]="imgProduk2"
+              alt="FotoProduk2"
+              height="250px"
+            />
+          </div>
+          <div class="carousel-item" *ngIf="produk.fotoProduk3">
+            <img
+              class="d-block w-100"
+              [src]="imgProduk3"
+              alt="FotoProduk3"
+              height="250px"
+            />
+          </div>
+          <div class="carousel-item" *ngIf="produk.fotoProduk4">
+            <img
+              class="d-block w-100"
+              [src]="imgProduk4"
+              alt="FotoProduk4"
+              height="250px"
+            />
+          </div>
+          <div class="carousel-item" *ngIf="produk.fotoProduk5">
+            <img
+              class="d-block w-100"
+              [src]="imgProduk5"
+              alt="FotoProduk5"
+              height="250px"
+            />
+          </div>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="next"
+        >
+          <span
+            class="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-auto text-center">
+      <h3>{{ this.produk.namaProduk }}</h3>
+      <hr align="left" />
+      <h6>Harga :&nbsp;&nbsp; Rp. {{ produk.hargaProduk | number }}</h6>
+      <hr align="left" />
+      <div class="price-group mb-3">
+        <a (click)="decPrice()" class="mr-3"
+          ><i class="fa fa-minus-circle" aria-hidden="true"></i
+        ></a>
+        <input
+          [(ngModel)]="produk.jumlahItem"
+          type="number"
+          name="price"
+          id="price"
+          class="text-center input-item"
+        />
+        <a (click)="incPrice()" class="ml-3"
+          ><i class="fa fa-plus-circle" aria-hidden="true"></i
+        ></a>
+      </div>
+      <button type="button" class="btn btn-success button-action" (click)="addCart()">
+        <i class="fas fa-cart-plus"></i> Tambah Keranjang
+      </button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-auto">
+      <h5>Deskripsi Produk :</h5>
+      <div [innerHTML]="produk.deskripsiProduk"></div>
+    </div>
+  </div>
+</div>

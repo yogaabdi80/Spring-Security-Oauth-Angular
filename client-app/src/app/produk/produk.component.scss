@@ -1,0 +1,59 @@
+/*styling the controls of basic carousel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  background-size: 100%, 100%;
+  background-color: #1b1b1b;
+  opacity: 0.5;
+  border: 0 none;
+  border-radius: 50%;
+}
+
+.carousel-control {
+  /*size */
+  height: 4rem;
+  width: 4rem;
+  /*color */
+  background: #1b1b1b none repeat scroll 0 0;
+  opacity: 0.6;
+  /*shape border*/
+  border: 0 none;
+  border-radius: 50%; /*zero for square */
+  /*symbol */
+  color: #fff;
+  line-height: 70px;
+  /*vertical position */
+  top: 50%;
+}
+
+/*carousel indicators */
+.carousel-indicators li {
+  background: #343a40 none repeat scroll 0 0;
+  border: 0 none;
+  border-radius: 50%;
+  height: 30px;
+  margin: 3px;
+  opacity: 0.6;
+  width: 30px;
+}
+/*active slide indicator */
+.carousel-indicators .active {
+  background: #fff none repeat scroll 0 0;
+  border: 4px solid #343a40;
+}
+
+.input-item{
+  width: 3rem;
+}
+
+// .price-group{
+//   margin-left:5%;
+// }
+
+.button-action{
+  width:12rem;
+}
+// .button-action-group{
+//   margin-left:25%;
+// }
