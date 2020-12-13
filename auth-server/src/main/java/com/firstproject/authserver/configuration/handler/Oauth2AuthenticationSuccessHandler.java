@@ -19,8 +19,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.firstproject.authserver.model.entity.Authorities;
+import com.firstproject.authserver.model.entity.Cart;
 import com.firstproject.authserver.model.entity.User;
 import com.firstproject.authserver.repository.AuthoritiesRepository;
+import com.firstproject.authserver.repository.CartRepo;
 import com.firstproject.authserver.repository.UserRepository;
 
 @Component("oauth2authSuccessHandler")
@@ -31,6 +33,9 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
 	@Autowired
 	private UserRepository repo;
+	
+	@Autowired
+	private CartRepo cartRepo;
 
 	@Autowired
 	private AuthoritiesRepository authoritiesRepo;
@@ -42,6 +47,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String name = oToken.getPrincipal().getAttributes().get("name").toString();
 		String email = oToken.getPrincipal().getAttributes().get("email").toString();
+		System.out.println(email);
 		User user =  repo.findByEmail(email);
 		if(user==null) {
 			user = new User(oToken.getName(), encoder.encode(UUID.randomUUID().toString()), true, email,name);
@@ -49,11 +55,15 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 			List<Authorities> listAuthorities = new ArrayList<Authorities>();
 			listAuthorities.add(authoritiesRepo.findById("r002").get());
 			user.setAuthorities(listAuthorities);
+			Cart cart = new Cart();
+			user=repo.save(user);
+			cart.setUser(user);
+			user.setCart(cart);
 			repo.save(user);
 		}
 
 
-		this.redirectStrategy.sendRedirect(request, response, "/oauth/authorize?client_id=clientauthcode&response_type=code&redirect_uri=http://localhost:8081/auth/server/user/getToken");
+		this.redirectStrategy.sendRedirect(request, response, "/oauth/authorize?client_id=clientauthcode&response_type=code&redirect_uri=http://localhost:4200");
 
 	}
 }

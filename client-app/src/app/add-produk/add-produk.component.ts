@@ -21,45 +21,47 @@ export class AddProdukComponent implements OnInit {
   public fileProduk: FileProduk = new FileProduk();
   public fotoProduk: any;
 
-  constructor(private produkService: ProdukService, public router: Router,public route:ActivatedRoute,private sanitizer: DomSanitizer) { }
+  constructor(private produkService: ProdukService, public router: Router, public route: ActivatedRoute, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params=>{
-      if(params['action']==='edit'){
-        this.produkService.getProduk(params['id']).subscribe(result=>{
+    this.route.queryParams.subscribe(params => {
+      this.produkService.setLoadingScreen(true);
+      if (params['action'] === 'edit') {
+        this.produkService.getProduk(params['id']).subscribe(result => {
           this.produk = result;
-          if(result.hargaProduk!==null) this.separator = result.hargaProduk.toLocaleString();
+          if (result.hargaProduk !== null) this.separator = result.hargaProduk.toLocaleString();
           if (result.fotoProduk1) {
             this.produkService.getImage(result.fotoProduk1).subscribe(data => {
-              this.fileProduk.urlfoto1=this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
+              this.fileProduk.urlfoto1 = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
             })
           }
           if (result.fotoProduk2) {
             this.produkService.getImage(result.fotoProduk2).subscribe(data => {
-              this.fileProduk.urlfoto2=this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
+              this.fileProduk.urlfoto2 = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
             })
           }
           if (result.fotoProduk3) {
             this.produkService.getImage(result.fotoProduk3).subscribe(data => {
-              this.fileProduk.urlfoto3=this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
+              this.fileProduk.urlfoto3 = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
             })
           }
           if (result.fotoProduk4) {
             this.produkService.getImage(result.fotoProduk4).subscribe(data => {
-              this.fileProduk.urlfoto4=this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
+              this.fileProduk.urlfoto4 = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
             })
           }
           if (result.fotoProduk5) {
             this.produkService.getImage(result.fotoProduk5).subscribe(data => {
-              this.fileProduk.urlfoto5=this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
+              this.fileProduk.urlfoto5 = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.body));
             })
-          }    
+          }
         })
       };
-    })
-    setTimeout(() => {
-      this.validateFile();
-    }, 0);
+      setTimeout(() => {
+        this.produkService.setLoadingScreen(false);
+      }, 200);
+    });
+    // this.validateFile();
   }
 
   public readerImage(e: any, pointer: any) {
@@ -86,20 +88,32 @@ export class AddProdukComponent implements OnInit {
 
   validateFile() {
     if (this.produk.fotoProduk1 || this.fileProduk.foto1 || this.fileProduk.urlfoto1) {
-      this.form.controls['fotoProduk1'].setErrors(null);
+      this.form.controls['fotoProduk1'].setErrors({ fileError: false });
     } else if (!this.produk.fotoProduk1 && !this.fileProduk.foto1) {
       this.form.controls['fotoProduk1'].setErrors({ fileError: true });
     }
   }
 
   save() {
+    this.produkService.setLoadingScreen(true);
     if (this.form.form.valid) {
       this.produkService.postProduk(this.produk, this.fileProduk.foto1, this.fileProduk.foto2,
         this.fileProduk.foto3, this.fileProduk.foto4, this.fileProduk.foto5).subscribe(data => {
           alert(data.message)
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
+        },error=>{
+          console.log(error);
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
         });
-    } else{
+    } else {
       alert("Ada Data Yang Belum Diisi!");
+      setTimeout(() => {
+        this.produkService.setLoadingScreen(false);
+      }, 200);
     }
   }
 

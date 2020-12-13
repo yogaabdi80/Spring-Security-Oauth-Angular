@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CookieService } from 'ngx-cookie';
 import { CartDTO } from '../model/produk';
 import { ProdukService } from '../service/produk.service';
 
@@ -10,18 +11,21 @@ import { ProdukService } from '../service/produk.service';
 })
 export class CheckOutComponent implements OnInit {
 
-  constructor(private produkService:ProdukService,private sanitizer: DomSanitizer) { }
+  constructor(private produkService:ProdukService,private sanitizer: DomSanitizer, private cookieService: CookieService) { }
 
   public sum:number=0;
+  public idCart: number;
 
   ngOnInit(): void {
+    this.idCart = JSON.parse(this.cookieService.get("user")).cart;
     this.getData();
   }
 
   public cartList:Array<CartDTO> = new Array<CartDTO>();
 
   getData(){
-    this.produkService.getCart().subscribe(data=>{
+    this.produkService.setLoadingScreen(true);
+    this.produkService.getCart(this.idCart).subscribe(data=>{
       this.cartList = data.cartDTO;
       data.cartDTO.forEach(element => {
         this.sum+=(element.hargaProduk*element.jumlahItem);
@@ -31,6 +35,9 @@ export class CheckOutComponent implements OnInit {
           });
         }
       });
+      setTimeout(() => {
+        this.produkService.setLoadingScreen(false);
+      }, 200);
     })
   }
 }

@@ -8,52 +8,59 @@
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Foto Profil</label>
                     <div class="col-md-4">
-                        <input type="file" class="form-control-file">
+                        <input type="file" class="form-control-file" (change)="readerImage($event)">
                     </div>
-                    <img src="../../assets/img/blank-profile-picture.png" alt="Foto Profil" height="100px" width="120px">
+                    <img class="ml-3" *ngIf="!fotoProfilUrl" src="../../assets/img/blank-profile-picture.png" alt="Foto Profil" height="150px" width="170px">
+                    <img class="ml-3" *ngIf="fotoProfilUrl" [src]="fotoProfilUrl" alt="Foto Profil" height="150px" width="170px">
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Nama Lengkap</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control">
+                        <input id="fullname" name="fullname" type="text" class="form-control" [(ngModel)]="userDto.fullname">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">No Hp</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control">
+                        <input id="noHp" name="noHp" type="text" class="form-control" [(ngModel)]="userDto.noHp">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Email</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control">
+                        <input id="email" name="email" disabled type="text" class="form-control" [(ngModel)]="userDto.email">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Username</label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control">
+                        <input disabled id="username" name="username" type="text" class="form-control" [(ngModel)]="userDto.username">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Password</label>
+                    <!-- <div class="col-md-4">
+                        <input disabled type="password" class="form-control" value="asdasdaasd">
+                    </div> -->
                     <div class="col-md-4">
-                        <input disabled type="text" class="form-control">
+                        <button class="btn btn-outline-primary" (click)="this.router.navigate(['change-password', id])">Ganti Password</button>
                     </div>
-                    <button class="btn btn-outline-primary">Ganti Password</button>
                 </div>
                 <div class="form-group row">
                     <label for="" class="col-md-3 col-form-label">Alamat</label>
                     <div class="col-md-4">
-                        <!-- <input type="text" class="form-control"> -->
-                        <textarea class="form-control" name="alamat" id="alamat" rows="5"></textarea>
+                        <textarea id="alamat" name="alamat" class="form-control" name="alamat" id="alamat" rows="5" [(ngModel)]="userDto.alamat"></textarea>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
-                <button class="btn btn-success">Simpan</button>
-            </div>
+                <div class="row float-right">
+                  <div class="col-md">
+                    <button class="btn btn-danger mr-2" type="button" (click)="this.router.navigate(['home'])">Kembali</button>
+                    <button class="btn btn-success" type="button" (click)="save()">Simpan</button>
+                  </div>
+                </div>
+              </div>
         </div>
     </form>
 </div>

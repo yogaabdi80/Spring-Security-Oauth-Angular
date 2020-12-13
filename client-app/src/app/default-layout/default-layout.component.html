@@ -1,4 +1,12 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<div class="loading-text" *ngIf="loading">
+  <div>
+     <strong
+        >Harap Tunggu <span class="showMe1">.</span>
+        <span class="showMe2">.</span> <span class="showMe3">.</span>
+     </strong>
+  </div>
+</div>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" [class.lightbox]="loading">
   <a class="navbar-brand text-white" (click)="this.router.navigate(['home'])"
     >Latihan Aplikasi</a
   >
@@ -60,20 +68,20 @@
         Search
       </button>
     </form>
-    <!-- <a
-      class="mt-2 mt-md-0 ml-3 rounded-circle bg-white"
+    <a
+      mat-icon-button
+      class="mt-2 mt-md-0 mx-2 bg-white"
       (click)="this.router.navigate(['cart-list'])"
-      ><i class="fas fa-shopping-bag mr-sm-2" aria-hidden="true"></i>
-      <span class="badge badge-danger">{{ notif }}</span></a
-    > -->
-    <a mat-icon-button class="mt-2 mt-md-0 mx-2 bg-white">
-      <mat-icon matBadge="{{notif}}" matBadgeColor="accent">shopping_cart</mat-icon>
+      *ngIf="authService.checkCredential()"
+    >
+      <mat-icon matBadge="{{ notif }}" matBadgeColor="accent"
+        >shopping_cart</mat-icon
+      >
     </a>
     <ul class="navbar-nav mt-2 mt-md-0">
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" *ngIf="authService.checkCredential()">
         <a
           class="nav-link dropdown-toggle"
-          href="#"
           id="navbarDropdown"
           role="button"
           data-toggle="dropdown"
@@ -84,16 +92,22 @@
             src="../../assets/img/blank-profile-picture.png"
             alt="Foto Profil"
             class="md-avatar rounded-circle"
+            *ngIf="!fotoProfil"
+          />
+          <img
+            [src]="fotoProfil"
+            alt="Foto Profil"
+            class="md-avatar rounded-circle"
+            *ngIf="fotoProfil"
           />
         </a>
         <div
           class="dropdown-menu dropdown-menu-right"
           aria-labelledby="navbarDropdown"
         >
-          <a class="dropdown-item" (click)="this.router.navigate(['cart-list'])"
-            ><i class="fas fa-shopping-bag mr-sm-2" aria-hidden="true"></i
-            >Keranjang <span class="badge badge-danger">{{ notif }}</span></a
-          >
+          <div class="dropdown-item mb-2" *ngIf="this.userInfo">
+              <b>{{ this.userInfo.fullname }}</b>
+          </div>
           <a
             class="dropdown-item"
             (click)="
@@ -101,27 +115,32 @@
                 queryParams: { action: 'add' }
               })
             "
+            *ngIf="this.userInfo.authorities[0] === 'ROLE_ADMIN'"
             ><i class="fa fa-plus mr-sm-2" aria-hidden="true"></i>Tambah
             Produk</a
           >
-          <a class="dropdown-item"
+          <a class="dropdown-item" (click)="profil()"
             ><i class="fa fa-user mr-sm-2" aria-hidden="true"></i>Profil</a
           >
-          <a class="dropdown-item" href="#"
-            ><i class="fa fa-cog mr-sm-2" aria-hidden="true"></i>Setting</a
-          >
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#"
+          <a class="dropdown-item" (click)="logout()"
             ><i class="fa fa-sign-out-alt mr-sm-2" aria-hidden="true"></i>
             Logout</a
           >
         </div>
       </li>
+      <button
+        *ngIf="!authService.checkCredential()"
+        class="btn btn-secondary mt-2 mt-md-0 mx-2"
+        (click)="this.router.navigate(['login'])"
+      >
+        Login
+      </button>
     </ul>
   </div>
 </nav>
 
-<main role="main">
+<main role="main" [class.lightbox]="loading">
   <div class="animated fadeIn container-fluid main-class">
     <router-outlet></router-outlet>
   </div>

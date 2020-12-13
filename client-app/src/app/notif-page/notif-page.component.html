@@ -1,0 +1,82 @@
+<main role="main" class="container text-center" *ngIf="verifikasiBool">
+  <h1 class="mt-5">{{ message }} <i class="far fa-check-circle"></i></h1>
+  <p class="lead">
+    Akun anda telah aktif silahkan
+    <a href="#/login">login</a>.
+  </p>
+</main>
+<main role="main" class="container text-center" *ngIf="messageFailedBool">
+  <h1 class="mt-5">{{ message }}</h1>
+  <p class="lead">
+    Kirim ulang 
+    <a href="#/forgot-password">klik disini</a>.
+  </p>
+</main>
+<div class="container" *ngIf="resetPasswordBool">
+  <div class="row justify-content-md-center">
+    <form #form="ngForm" class="form-signin col-md-4" (ngSubmit)="save()">
+      <h1 class="h3 mb-3 font-weight-norma text-center">Reset Password</h1>
+      <br>
+      <label for="newPassword" class="form-check-label">New Password :</label>
+      <input
+        required
+        type="password"
+        id="newPassword"
+        name="newPassword"
+        class="form-control mb-1"
+        placeholder="New Password"
+        (input)="confirmPasswordValidation()"
+        [(ngModel)]="newPassword"
+        #newPasswordValidation="ngModel"
+        [ngClass]="{
+          'is-invalid':
+            (form.submitted || newPasswordValidation.touched) &&
+            newPasswordValidation.invalid
+        }"
+      />
+      <div
+        *ngIf="
+          (form.submitted || newPasswordValidation.touched) &&
+          newPasswordValidation.invalid
+        "
+        class="invalid-feedback"
+      >
+        Harap Masukkan Password Baru
+      </div>
+      <label for="passwordConfirm" class="form-check-label">Confirm Password :</label>
+      <input
+        required
+        type="password"
+        id="passwordConfirm"
+        name="passwordConfirm"
+        class="form-control"
+        placeholder="Confirm Password"
+        [(ngModel)]="passwordConfirm"
+        (input)="confirmPasswordValidation()"
+        #passwordConfirmValidation="ngModel"
+        [ngClass]="{
+          'is-invalid':
+            (form.submitted || passwordConfirmValidation.touched) &&
+            passwordConfirmValidation.invalid
+        }"
+      />
+      <div
+        *ngIf="
+          (form.submitted || passwordConfirmValidation.touched) &&
+          passwordConfirmValidation.invalid
+        "
+        class="invalid-feedback mb-1"
+      >
+        <span *ngIf="passwordConfirmValidation.errors?.required">
+          Harap Masukkan Confirm Password
+        </span>
+        <span *ngIf="passwordConfirmValidation.errors?.confirmPasswordError">
+          Password Tidak Sesuai
+        </span>
+      </div>
+      <button class="btn btn-lg btn-success btn-block" type="submit">
+        Reset Password
+      </button>
+    </form>
+  </div>
+</div>

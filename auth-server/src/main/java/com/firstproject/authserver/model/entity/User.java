@@ -11,10 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.firstproject.authserver.model.dto.UserDto;
 
 import lombok.Data;
@@ -66,4 +68,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "id_role")
     )
 	private List<Authorities> authorities;
+	
+	@JsonManagedReference
+	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
+	private Cart cart;
 }

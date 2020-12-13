@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
 import { CartDTO } from '../model/produk';
 import { ProdukService } from '../service/produk.service';
 
@@ -11,17 +12,18 @@ import { ProdukService } from '../service/produk.service';
 })
 export class CartListComponent implements OnInit {
 
-  constructor(public router: Router, private produkService: ProdukService, private sanitizer: DomSanitizer) { }
+  constructor(public router: Router, private produkService: ProdukService, private sanitizer: DomSanitizer, private cookieService: CookieService) { }
 
   ngOnInit(): void {
+    this.idCart = JSON.parse(this.cookieService.get("user")).cart;
     this.getData();
   }
 
   public cartList: Array<CartDTO> = new Array<CartDTO>();
-  public idUser: number = 1;
+  public idCart: number;
 
   checkout() {
-    this.produkService.checkCart(this.cartList, 41).subscribe(data => {
+    this.produkService.checkCart(this.cartList, this.idCart).subscribe(data => {
       if (data.status === 200) this.router.navigate(['check-out']);
     })
   }
@@ -35,7 +37,8 @@ export class CartListComponent implements OnInit {
   }
 
   getData() {
-    this.produkService.getCart().subscribe(data => {
+    this.produkService.setLoadingScreen(true);
+    this.produkService.getCart(this.idCart).subscribe(data => {
       this.cartList = data.cartDTO;
       console.log(data)
       data.cartDTO.forEach(element => {
@@ -45,13 +48,17 @@ export class CartListComponent implements OnInit {
           });
         }
       });
+      setTimeout(() => {
+        this.produkService.setLoadingScreen(false);
+      }, 200);
     })
   }
 
   delete(id: number) {
-    this.produkService.deleteCart(id).subscribe(() => {
+    this.produkService.setLoadingScreen(true);
+    this.produkService.deleteCart(id, this.idCart).subscribe(() => {
       this.getData();
-      this.produkService.getJumlahCart().subscribe(data=>{
+      this.produkService.getJumlahCart(this.idCart).subscribe(data => {
         this.produkService.setJumlahCart(data);
       });
     });

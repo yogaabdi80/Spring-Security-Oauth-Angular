@@ -11,7 +11,7 @@ export class Produk {
 	public fotoProduk3:String=null;
 	public fotoProduk4:String=null;
     public fotoProduk5:String=null;
-    public jumlahItem:number;
+    public jumlahItem:number=null;
 }
 
 export class ProdukHome{

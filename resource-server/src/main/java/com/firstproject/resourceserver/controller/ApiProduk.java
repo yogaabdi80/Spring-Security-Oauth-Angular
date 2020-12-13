@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -69,7 +68,7 @@ public class ApiProduk {
 	@Autowired
 	private StorageService storage;
 
-	@GetMapping()
+	@GetMapping("/getAll")
 	private ProdukHomeDTO getAll(Pageable pageable,
 			@RequestParam(name = "kategori", required = false, defaultValue = "") String kategori,
 			@RequestParam(name = "search", required = false, defaultValue = "") String search) {
@@ -109,7 +108,7 @@ public class ApiProduk {
 
 	@Transactional
 	@PostMapping("/addProduk")
-	private ApiResponse addProduk(@RequestPart(name = "produk") ProdukDTO produkDTO,
+	private ApiResponse<?> addProduk(@RequestPart(name = "produk") ProdukDTO produkDTO,
 			@RequestParam(name = "foto1", required = false) MultipartFile foto1,
 			@RequestParam(name = "foto2", required = false) MultipartFile foto2,
 			@RequestParam(name = "foto3", required = false) MultipartFile foto3,
@@ -163,19 +162,19 @@ public class ApiProduk {
 		}
 		storage.store(uploadFiles, "Produk");
 		produkRepo.save(produk);
-		return new ApiResponse("Berhasil Disimpan", 200);
+		return new ApiResponse<>("Berhasil Disimpan", 200,null);
 	}
 
 	@GetMapping("/cartNotif")
-	private Integer findCartNotif() {
-		Cart cart = cartRepo.findByIdUser(1L).get();
+	private Integer findCartNotif(@RequestParam String idCart) {
+		Cart cart = cartRepo.findById(Long.parseLong(idCart)).get();
 		return cart.getCartList().size();
 	}
 
 	@GetMapping("/getCart")
-	private CartDTOList getCart() {
+	private CartDTOList getCart(@RequestParam String idCart) {
 		List<CartDTO> cartListDTO = new ArrayList<CartDTO>();
-		Cart cart = cartRepo.findById(41L).get();
+		Cart cart = cartRepo.findById(Long.parseLong(idCart)).get();
 		for (CartProduk cartIter : cart.getCartList()) {
 			CartDTO cartDTO = new CartDTO();
 			cartDTO.setId(cartIter.getId());
@@ -196,7 +195,7 @@ public class ApiProduk {
 
 	@Transactional
 	@PostMapping("/addCart")
-	private ApiResponse addCart(@RequestParam("idProduk") String idProduk, @RequestParam("idCart") String idCart,
+	private ApiResponse<?> addCart(@RequestParam("idProduk") String idProduk, @RequestParam("idCart") String idCart,
 			@RequestParam("jumlahItem") String jumlahItem) {
 		CartProduk cartProduk = cartProdukRepo.findByIdCartAndIdProduk(Long.parseLong(idCart), idProduk)
 				.orElse(new CartProduk());
@@ -204,12 +203,12 @@ public class ApiProduk {
 		cartProduk.setJumlahItem(Integer.parseInt(jumlahItem));
 		cartProduk.setIdCart(Long.parseLong(idCart));
 		cartProdukRepo.save(cartProduk);
-		return new ApiResponse("Produk Sudah Ditambahkan ke Cart!", 200);
+		return new ApiResponse<>("Produk Sudah Ditambahkan ke Cart!", 200,null);
 	}
 
 	@Transactional
 	@PostMapping("/checkCartList")
-	private ApiResponse checkCartList(@RequestPart("cartDTOList") List<CartDTO> cartDTOList,
+	private ApiResponse<?> checkCartList(@RequestPart("cartDTOList") List<CartDTO> cartDTOList,
 			@RequestParam("idCart") String idCart) {
 		for (CartDTO cartDTO : cartDTOList) {
 			CartProduk cart = new CartProduk();
@@ -219,12 +218,12 @@ public class ApiProduk {
 			cart.setJumlahItem(cartDTO.getJumlahItem());
 			cartProdukRepo.save(cart);
 		}
-		return new ApiResponse("Berhasil Disimpan", 200);
+		return new ApiResponse<>("Berhasil Disimpan", 200,null);
 	}
 
-	@DeleteMapping("/deleteCart/{id}")
-	private void deleteCart(@PathVariable String id) {
-		cartProdukRepo.delete(cartProdukRepo.findById(Long.parseLong(id)).get());
+	@DeleteMapping("/deleteCart")
+	private void deleteCart(@RequestParam String id, @RequestParam String idCart) {
+		cartProdukRepo.delete(cartProdukRepo.findByIdAndIdCart(Long.parseLong(id),Long.parseLong(idCart)).get());
 	}
 
 	@GetMapping("/getGambarProduk/{filename}")

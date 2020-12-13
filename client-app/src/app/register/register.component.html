@@ -1,50 +1,163 @@
-<div class="container">
-    <form action="" class="form-horizontal">
-        <div class="card">
-            <div class="card-header bg-dark text-white">
-                <b>Registrasi</b>
+<div class="loading-text" *ngIf="loading">
+  <div>
+     <strong
+        >Harap Tunggu <span class="showMe1">.</span>
+        <span class="showMe2">.</span> <span class="showMe3">.</span>
+     </strong>
+  </div>
+</div>
+<div class="container" [class.lightbox]="loading">
+  <div class="alert alert-success" *ngIf="notifConfirm">
+    Registrasi Selesai, Harap Cek Email untuk Konfirmasi!
+  </div>
+  <form #form="ngForm" class="form-horizontal" (ngSubmit)="confirm()">
+    <div class="card">
+      <div class="card-header bg-dark text-white">
+        <b>Registrasi</b>
+      </div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label">Nama Lengkap :</label>
+          <div class="col-md-4">
+            <input
+              required
+              type="text"
+              class="form-control"
+              id="fullname"
+              name="fullname"
+              [(ngModel)]="user.fullname"
+              #fullname="ngModel"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || fullname.touched) && fullname.invalid
+              }"
+            />
+            <div
+              *ngIf="(form.submitted || fullname.touched) && fullname.invalid"
+              class="invalid-feedback"
+            >
+              Harap Masukkan Nama Lengkap
             </div>
-            <div class="card-body">
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">Nama Lengkap :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">No Hp :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">Email :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">Username :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">Password :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="" class="col-md-3 col-form-label">Current Password :</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <button class="btn btn-success">Simpan</button>
-            </div>
+          </div>
         </div>
-    </form>
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label">Email :</label>
+          <div class="col-md-4">
+            <input
+              required
+              email
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              [(ngModel)]="user.email"
+              #email="ngModel"
+              [ngClass]="{
+                'is-invalid': (form.submitted || email.touched) && email.invalid
+              }"
+            />
+            <div
+              *ngIf="(form.submitted || email.touched) && email.invalid"
+              class="invalid-feedback"
+            >
+              <span *ngIf="email.errors?.required"> Harap Masukkan Email </span>
+              <span *ngIf="email.errors?.email"> Email Tidak Valid </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label">Username :</label>
+          <div class="col-md-4">
+            <input
+              required
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              [(ngModel)]="user.username"
+              #username="ngModel"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || username.touched) && username.invalid
+              }"
+            />
+            <div
+              *ngIf="(form.submitted || username.touched) && username.invalid"
+              class="invalid-feedback"
+            >
+              Harap Masukkan Username
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label">Password :</label>
+          <div class="col-md-4">
+            <input
+              required
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              (input)="confirmPasswordValidation()"
+              [(ngModel)]="user.password"
+              #password="ngModel"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || password.touched) && password.invalid
+              }"
+            />
+            <div
+              *ngIf="(form.submitted || password.touched) && password.invalid"
+              class="invalid-feedback"
+            >
+              Harap Masukkan Password
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-md-3 col-form-label"
+            >Confirm Password :</label
+          >
+          <div class="col-md-4">
+            <input
+              required
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              [(ngModel)]="user.confirmPassword"
+              (input)="confirmPasswordValidation()"
+              #confirmPassword="ngModel"
+              [ngClass]="{
+                'is-invalid':
+                  (form.submitted || confirmPassword.touched) &&
+                  confirmPassword.invalid
+              }"
+            />
+            <div
+              *ngIf="
+                (form.submitted || confirmPassword.touched) &&
+                confirmPassword.invalid
+              "
+              class="invalid-feedback"
+            >
+              <span *ngIf="confirmPassword.errors?.required">
+                Harap Masukkan Confirm Password
+              </span>
+              <span *ngIf="confirmPassword.errors?.confirmPasswordError">
+                Password Tidak Sesuai
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row float-right">
+          <div class="col-md">
+            <button class="btn btn-success" type="submit">Simpan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

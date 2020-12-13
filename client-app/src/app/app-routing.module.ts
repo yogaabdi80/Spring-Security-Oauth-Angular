@@ -6,11 +6,12 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RegisterComponent } from './register/register.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { VerifikasiAkunComponent } from './verifikasi-akun/verifikasi-akun.component';
+import { AuthGuardService } from './service/auth-guard.service';
+import { NotifPageComponent } from './notif-page/notif-page.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: '', component: DefaultLayoutComponent, children: [
       {
@@ -21,22 +22,22 @@ const routes: Routes = [
         loadChildren: () => import("../app/produk/produk.module").then(m => m.ProdukModule)
       },{
         path: 'check-out',
-        loadChildren: () => import("../app/check-out/check-out.module").then(m => m.CheckOutModule)
+        loadChildren: () => import("../app/check-out/check-out.module").then(m => m.CheckOutModule), canActivate : [AuthGuardService]
       },{
         path: 'cart-list',
-        loadChildren: () => import("../app/cart-list/cart-list.module").then(m => m.CartListModule)
+        loadChildren: () => import("../app/cart-list/cart-list.module").then(m => m.CartListModule), canActivate : [AuthGuardService]
       },{
-        path: 'informasi-diri',
-        loadChildren: () => import("../app/informasi-diri/informasi-diri.module").then(m => m.InformasiDiriModule)
+        path: 'informasi-diri/:id',
+        loadChildren: () => import("../app/informasi-diri/informasi-diri.module").then(m => m.InformasiDiriModule), canActivate : [AuthGuardService]
       }
     ]
   },
-  {path:'login',component: LoginComponent },
+  {path:'login',component: LoginComponent},
   {path:'register',component: RegisterComponent },
-  {path:'add-produk',component: AddProdukComponent },
+  {path:'add-produk',component: AddProdukComponent , canActivate : [AuthGuardService]},
   {path:'forgot-password',component: ForgotPasswordComponent },
-  {path:'reset-password',component: ResetPasswordComponent },
-  {path:'verifikasi-akun',component: VerifikasiAkunComponent },
+  {path:'change-password/:id',component: ChangePasswordComponent , canActivate : [AuthGuardService]},
+  {path:'notif-page',component: NotifPageComponent },
   {path:'**',component: NotFoundComponent }
 ];
 

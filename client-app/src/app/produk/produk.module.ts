@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProdukService } from '../service/produk.service';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../service/auth.service';
+import { CookieModule } from 'ngx-cookie';
 
 
 @NgModule({
@@ -26,9 +28,11 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     MatButtonModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    CookieModule.forRoot()
   ], providers: [
-    ProdukService
+    ProdukService,
+    AuthService
   ]
 })
 export class ProdukModule { }

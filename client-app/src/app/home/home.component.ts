@@ -98,6 +98,7 @@ export class HomeComponent implements OnInit {
   }
 
   getData() {
+    this.produkService.setLoadingScreen(true);
     this.route.queryParams.subscribe(params => {
       if (params['kategori'] && !params['search']) {
         this.produkService.getAllProduk(this.size.toString(), (this.page - 1).toString(), this.sort, params['kategori'], null).subscribe(result => {
@@ -111,6 +112,9 @@ export class HomeComponent implements OnInit {
               });
             }
           });
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
         });
       } else if (params['search'] && !params['kategori']) {
         this.produkService.getAllProduk(this.size.toString(), (this.page - 1).toString(), this.sort, null, params['search']).subscribe(result => {
@@ -124,6 +128,9 @@ export class HomeComponent implements OnInit {
               });
             }
           });
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
         });
       } else if (params['search'] && params['kategori']) {
         this.produkService.getAllProduk(this.size.toString(), (this.page - 1).toString(), this.sort, params['kategori'], params['search']).subscribe(result => {
@@ -137,6 +144,9 @@ export class HomeComponent implements OnInit {
               });
             }
           });
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
         });
       } else {
         this.produkService.getAllProduk(this.size.toString(), (this.page - 1).toString(), this.sort, null, null).subscribe(result => {
@@ -150,6 +160,9 @@ export class HomeComponent implements OnInit {
               });
             }
           });
+          setTimeout(() => {
+            this.produkService.setLoadingScreen(false);
+          }, 200);
         });
       };
     });

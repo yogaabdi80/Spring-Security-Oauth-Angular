@@ -1,33 +1,58 @@
 <div class="container text-center">
-  <form class="form-signin">
-    <img
-      class="mb-4"
-      src="../../assets/img/bootstrap-solid.svg"
-      alt=""
-      width="72"
-      height="72"
-    />
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
+  <form class="form-signin" #form="ngForm" (ngSubmit)="login()">
+    <h1 class="mb-3">Login</h1>
+    <label for="inputEmail" class="sr-only">Username / Email</label>
     <input
-      type="email"
-      id="inputEmail"
+      type="text"
+      id="username"
+      name="username"
       class="form-control"
-      placeholder="Email address"
+      placeholder="Username / Email"
       required
       autofocus
+      [(ngModel)]="username"
+      [ngClass]="{
+        'is-invalid':
+          (form.submitted || usernameModel.touched) && usernameModel.invalid
+      }"
+      #usernameModel="ngModel"
     />
+    <div
+      *ngIf="(form.submitted || usernameModel.touched) && usernameModel.invalid"
+      class="invalid-feedback"
+    >
+      Username / Email Harap Diisi!
+    </div>
     <label for="inputPassword" class="sr-only">Password</label>
     <input
       type="password"
       id="inputPassword"
+      name="inputPassword"
       class="form-control"
       placeholder="Password"
       required
+      [(ngModel)]="password"
+      [ngClass]="{
+        'is-invalid':
+          (form.submitted || passwordModel.touched) && passwordModel.invalid
+      }"
+      #passwordModel="ngModel"
     />
-    <button class="btn btn-lg btn-primary btn-block" type="submit">
-      Sign in
+    <div
+      *ngIf="(form.submitted || passwordModel.touched) && passwordModel.invalid"
+      class="invalid-feedback"
+    >
+      Password Harap Diisi!
+    </div>
+    <button class="btn btn-lg btn-success btn-block" type="submit">
+      Login
     </button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    <p class="my-2 text-left">Belum mempunyai akun? <span><a href="/register">Daftar Disini</a></span></p>
+    <p class="my-2 text-left">Lupa password? <span><a href="/forgot-password">Klik Disini</a></span></p>
+    <p class="mt-3 text-left"><b>Login Dengan :</b></p>
+    <div class="row">
+      <a class="col-md btn-lg btn-danger mx-3" href="http://localhost:8081/auth/server/oauth2/authorization/google">Google</a>
+      <button class="col-md btn-lg btn-primary mx-3" href="http://localhost:8081/auth/server/oauth2/authorization/facebook">Facebook</button>
+    </div>
   </form>
 </div>

@@ -30,7 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
 		if (user != null) {
 			authoritiesDb = userDetailRepo.getAuthorities(user.getUsername());
 		} else {
-			throw new LoginException("Username atau Email tidak terdaftar!");
+			throw new UsernameNotFoundException("Username atau Email tidak terdaftar!");
 		}
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (String role : authoritiesDb) {

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ProdukService } from '../service/produk.service';
+import { CookieModule } from 'ngx-cookie';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ProdukService } from '../service/produk.service';
     FormsModule,
     CartListRoutingModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    CookieModule.forRoot()
   ], providers:[ProdukService]
 })
 export class CartListModule { }

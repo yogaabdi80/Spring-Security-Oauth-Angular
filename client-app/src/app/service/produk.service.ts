@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie';
 import { Observable, Subject } from 'rxjs';
 import { CartDTO, CartDTOList, Produk, ProdukHomeDTO } from '../model/produk';
 import { ApiResponse } from '../model/response';
@@ -9,19 +10,30 @@ import { ApiResponse } from '../model/response';
 })
 export class ProdukService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private cookieService: CookieService) { }
 
-  private baseUrl = "http://localhost:8080/resource/server/api/produk/";
+  private baseUrl = "/resource/server/api/produk/";
 
   public jumlahCart = new Subject<number>();
   public jumlahCart$ = this.jumlahCart.asObservable();
+  public loading = new Subject<boolean>();
+  public loading$ = this.loading.asObservable();
+
+  setLoadingScreen(bool:boolean){
+    console.log(this.loading);
+    this.loading.next(bool);
+  }
 
   setJumlahCart(number:number) {
     this.jumlahCart.next(number);
   }
 
-  getJumlahCart(): Observable<number> {
-    return this.http.get<number>(this.baseUrl + "cartNotif");
+  getJumlahCart(idCart:number): Observable<number> {
+    let params={
+      "idCart":idCart.toString(),
+      "access_token":this.cookieService.get("token")
+    }
+    return this.http.get<number>(this.baseUrl + "cartNotif",{ params: params });
   }
 
   getImage(filename: String): Observable<HttpResponse<Blob>> {
@@ -39,7 +51,7 @@ export class ProdukService {
     }
     if (kategori) params["kategori"] = kategori;
     if (search) params["search"] = search;
-    return this.http.get<ProdukHomeDTO>(this.baseUrl, { params: params });
+    return this.http.get<ProdukHomeDTO>(this.baseUrl + "getAll", { params: params });
   }
 
   getProduk(id: String): Observable<Produk> {
@@ -56,15 +68,21 @@ export class ProdukService {
     formdata.append("produk", new Blob([JSON.stringify(produk)], {
       type: "application/json"
     }));
-    return this.http.post<ApiResponse>(this.baseUrl + "addProduk", formdata);
+    let params={
+      "access_token":this.cookieService.get("token")
+    }
+    return this.http.post<ApiResponse>(this.baseUrl + "addProduk", formdata, { params: params });
   }
 
-  addCart(idProduk:string,idCart:string,jumlahItem:string): Observable<ApiResponse> {
+  addCart(idProduk:string,idCart:number,jumlahItem:string): Observable<ApiResponse> {
     let formdata: FormData = new FormData();
     formdata.append("idProduk", idProduk);
-    formdata.append("idCart", idCart);
+    formdata.append("idCart", idCart.toString());
     formdata.append("jumlahItem", jumlahItem);
-    return this.http.post<ApiResponse>(this.baseUrl + "addCart", formdata);
+    let params={
+      "access_token":this.cookieService.get("token")
+    }
+    return this.http.post<ApiResponse>(this.baseUrl + "addCart", formdata, { params: params });
   }
 
   checkCart(cartDTOList: Array<CartDTO>,idCart:number): Observable<ApiResponse> {
@@ -73,15 +91,27 @@ export class ProdukService {
     formdata.append("cartDTOList", new Blob([JSON.stringify(cartDTOList)], {
       type: "application/json"
     }));
-    return this.http.post<ApiResponse>(this.baseUrl + "checkCartList", formdata);
+    let params={
+      "access_token":this.cookieService.get("token")
+    }
+    return this.http.post<ApiResponse>(this.baseUrl + "checkCartList", formdata, { params: params });
   }
 
-  getCart(): Observable<CartDTOList> {
-    return this.http.get<CartDTOList>(this.baseUrl + "getCart");
+  getCart(idCart:number): Observable<CartDTOList> {
+    let params={
+      "access_token":this.cookieService.get("token"),
+      "idCart": idCart.toString()
+    }
+    return this.http.get<CartDTOList>(this.baseUrl + "getCart", { params: params });
   }
 
-  deleteCart(id:number){
-    return this.http.delete(this.baseUrl + "deleteCart/"+id);
+  deleteCart(id:number,idCart:number){
+    let params={
+      "access_token":this.cookieService.get("token"),
+      "id":id.toString(),
+      "idCart": idCart.toString()
+    }
+    return this.http.delete(this.baseUrl + "deleteCart", { params: params });
   }
 
 }

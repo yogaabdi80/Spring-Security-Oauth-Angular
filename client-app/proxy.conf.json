@@ -1,0 +1,10 @@
+{
+  "/resource/server/*": {
+    "target": "http://localhost:8080",
+    "secure": false
+  },
+  "/auth/server/*": {
+    "target": "http://localhost:8081",
+    "secure": false
+  }
+}
