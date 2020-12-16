@@ -7,5 +7,5 @@ url:
 
 urutan run:
 1) auth-server
-2) resource-serve
+2) resource-server
 3) client-app
