@@ -24,10 +24,12 @@ import com.firstproject.authserver.model.dto.UserDto;
 import com.firstproject.authserver.model.entity.Authorities;
 import com.firstproject.authserver.model.entity.Cart;
 import com.firstproject.authserver.model.entity.User;
+import com.firstproject.authserver.model.entity.UserDetail;
 import com.firstproject.authserver.model.entity.UserNotif;
 import com.firstproject.authserver.proxy.AuthProxy;
 import com.firstproject.authserver.repository.AuthoritiesRepository;
 import com.firstproject.authserver.repository.CartRepo;
+import com.firstproject.authserver.repository.UserDetailRepo;
 import com.firstproject.authserver.repository.UserRepository;
 import com.firstproject.authserver.repository.UserNotifRepository;
 
@@ -62,6 +64,9 @@ public class UserService {
 
 	@Autowired
 	private UserNotifRepository notifRepo;
+	
+	@Autowired
+	private UserDetailRepo detailRepo;
 
 	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	private static final String idRoleUser = "r002";
@@ -152,9 +157,13 @@ public class UserService {
 			if (userNotif != null) {
 				if (!userNotif.getExpiredDate().after(new Date(Calendar.getInstance().getTimeInMillis()))) {
 					repo.setEnabled(id, true);
+					User user = repo.findById(id).get();
 					Cart cart = new Cart();
-					cart.setUser(repo.findById(id).get());
+					cart.setUserCart(user);
 					cartRepo.save(cart);
+					UserDetail detail = new UserDetail();
+					detail.setUserDetail(user);
+					detailRepo.save(detail);
 				} else {
 					notifRepo.delete(userNotif);
 					return new Response<Object>("Waktu sudah habis, harap verifikasi ulang!", warningStatus, null);

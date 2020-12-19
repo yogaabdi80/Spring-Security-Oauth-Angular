@@ -70,6 +70,10 @@ public class User {
 	private List<Authorities> authorities;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
+	@OneToOne(mappedBy = "userCart", cascade = { CascadeType.ALL })
 	private Cart cart;
+	
+	@JsonManagedReference
+	@OneToOne(mappedBy = "userDetail", cascade = { CascadeType.ALL })
+	private UserDetail userDetail;
 }

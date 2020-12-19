@@ -91,18 +91,21 @@ public class ApiUser {
 
 	@GetMapping("/getProfil/{id}")
 	private void getProfil(@PathVariable String id, HttpServletResponse response) {
-		File file = storage.loadFile(userRepo.findById(Long.parseLong(id)).get().getUserDetail().getFotoProfil(), "User");
-		InputStream inputStream = null;
-		try {
-			inputStream = new BufferedInputStream(new FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			FileCopyUtils.copy(inputStream, response.getOutputStream());
-			response.flushBuffer();
-		} catch (IOException e) {
-			e.printStackTrace();
+		File file;
+		if(userRepo.findById(Long.parseLong(id)).get().getUserDetail().getFotoProfil()!=null) {			
+			file = storage.loadFile(userRepo.findById(Long.parseLong(id)).get().getUserDetail().getFotoProfil(), "User");
+			InputStream inputStream = null;
+			try {
+				inputStream = new BufferedInputStream(new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			try {
+				FileCopyUtils.copy(inputStream, response.getOutputStream());
+				response.flushBuffer();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

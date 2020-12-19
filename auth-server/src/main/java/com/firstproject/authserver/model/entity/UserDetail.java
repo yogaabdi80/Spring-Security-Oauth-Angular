@@ -1,5 +1,9 @@
 package com.firstproject.authserver.model.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,16 +18,23 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "dat_cart")
-public class Cart {
-
+@Table(name = "s_users_details")
+public class UserDetail {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "no_hp")
+	private String noHp;
+	
+	@Column(name = "foto_profil")
+	private String fotoProfil;
+	
+	private String alamat;
 	
 	@JsonBackReference
 	@OneToOne
     @JoinColumn(name = "id_user",referencedColumnName = "id_user")
-    private User userCart;
-	
+	private User userDetail;
 }

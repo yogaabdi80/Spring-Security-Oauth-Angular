@@ -15,7 +15,7 @@ export class InformasiDiriComponent implements OnInit {
   public userDto: UserInfo = new UserInfo();
   public fotoProfilUrl: any;
   public fotoProfil: File;
-  public id:any;
+  public id: any;
 
   constructor(private userService: UserService, private route: ActivatedRoute, private sanitizer: DomSanitizer, public router: Router,
     public produkService: ProdukService) { }
@@ -31,7 +31,7 @@ export class InformasiDiriComponent implements OnInit {
       this.userDto = data;
       if (data.fotoProfil) {
         this.userService.getImage(data.fotoProfil).subscribe(image => {
-          this.fotoProfilUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(image.body));
+          if (image.body.size > 0) this.fotoProfilUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(image.body));
         }
         )
       }

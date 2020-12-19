@@ -21,8 +21,10 @@ import org.springframework.stereotype.Component;
 import com.firstproject.authserver.model.entity.Authorities;
 import com.firstproject.authserver.model.entity.Cart;
 import com.firstproject.authserver.model.entity.User;
+import com.firstproject.authserver.model.entity.UserDetail;
 import com.firstproject.authserver.repository.AuthoritiesRepository;
 import com.firstproject.authserver.repository.CartRepo;
+import com.firstproject.authserver.repository.UserDetailRepo;
 import com.firstproject.authserver.repository.UserRepository;
 
 @Component("oauth2authSuccessHandler")
@@ -35,7 +37,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	private UserRepository repo;
 	
 	@Autowired
-	private CartRepo cartRepo;
+	private UserDetailRepo detailRepo;
 
 	@Autowired
 	private AuthoritiesRepository authoritiesRepo;
@@ -57,9 +59,12 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 			user.setAuthorities(listAuthorities);
 			Cart cart = new Cart();
 			user=repo.save(user);
-			cart.setUser(user);
+			cart.setUserCart(user);
 			user.setCart(cart);
 			repo.save(user);
+			UserDetail detail = new UserDetail();
+			detail.setUserDetail(user);
+			detailRepo.save(detail);
 		}
 
 
