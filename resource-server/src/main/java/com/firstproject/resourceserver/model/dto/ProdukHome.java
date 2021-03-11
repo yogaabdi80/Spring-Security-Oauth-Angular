@@ -1,7 +1,5 @@
 package com.firstproject.resourceserver.model.dto;
 
-import com.firstproject.resourceserver.model.entity.Produk;
-
 import lombok.Data;
 
 @Data

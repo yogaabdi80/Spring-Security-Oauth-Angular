@@ -23,7 +23,6 @@ import com.firstproject.authserver.model.entity.Cart;
 import com.firstproject.authserver.model.entity.User;
 import com.firstproject.authserver.model.entity.UserDetail;
 import com.firstproject.authserver.repository.AuthoritiesRepository;
-import com.firstproject.authserver.repository.CartRepo;
 import com.firstproject.authserver.repository.UserDetailRepo;
 import com.firstproject.authserver.repository.UserRepository;
 
@@ -52,6 +51,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		System.out.println(email);
 		User user =  repo.findByEmail(email);
 		if(user==null) {
+			System.out.println(oToken.getAuthorizedClientRegistrationId());
 			user = new User(oToken.getName(), encoder.encode(UUID.randomUUID().toString()), true, email,name);
 			user = repo.save(user);
 			List<Authorities> listAuthorities = new ArrayList<Authorities>();
@@ -67,8 +67,9 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 			detailRepo.save(detail);
 		}
 
+//		System.out.println("/oauth2/authorization/clientauthcode");
 
-		this.redirectStrategy.sendRedirect(request, response, "/oauth/authorize?client_id=clientauthcode&response_type=code&redirect_uri=http://localhost:4200");
+		this.redirectStrategy.sendRedirect(request, response, "oauth2/authorization/clientauthcode");
 
 	}
 }

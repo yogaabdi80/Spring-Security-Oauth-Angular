@@ -40,4 +40,4 @@ CREATE TABLE public.oauth_client_details (
 INSERT INTO public.oauth_client_details (client_id,resource_ids,client_secret,"scope",authorized_grant_types,web_server_redirect_uri,autoapprove,access_token_validity,refresh_token_validity,authorities,additional_information) VALUES
 	 ('mobileapp','belajar','$2a$10$rk7SKH0KPDnMWVmFPenbt.dWDgkFd5R03GKpCKzwfRr3fNTlNt03G','read,write,admin','password,refresh_token','http://localhost:8080/api/halo',NULL,NULL,NULL,NULL,NULL),
 	 ('clientspamobile','belajar','$2a$10$rk7SKH0KPDnMWVmFPenbt.dWDgkFd5R03GKpCKzwfRr3fNTlNt03G','read,write,admin','implicit','http://localhost:8080/api/halo',NULL,NULL,NULL,NULL,NULL),
-	 ('clientauthcode','belajar','$2a$10$rk7SKH0KPDnMWVmFPenbt.dWDgkFd5R03GKpCKzwfRr3fNTlNt03G','profile_edit,transaksi_menu,input_barang','authorization_code,refresh_token','http://localhost:4200','true',86400,NULL,NULL,NULL);
+	 ('clientauthcode','belajar','$2a$10$rk7SKH0KPDnMWVmFPenbt.dWDgkFd5R03GKpCKzwfRr3fNTlNt03G','profile_edit,transaksi_menu,input_barang','authorization_code,refresh_token','http://localhost','true',86400,NULL,NULL,NULL);

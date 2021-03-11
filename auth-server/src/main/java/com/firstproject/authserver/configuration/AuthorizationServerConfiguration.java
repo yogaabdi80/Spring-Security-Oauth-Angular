@@ -2,6 +2,8 @@ package com.firstproject.authserver.configuration;
 
 import java.security.KeyPair;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -25,13 +27,22 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+	private static final String KEY_STORE_FILE = "tutorialjwt.jks";
+    private static final String KEY_STORE_PASSWORD = "rahasia123";
+    private static final String KEY_ALIAS = "tutorialjwt";
+    private static final String JWK_KID = "tutorialjwt-id";
+    
 	@Autowired
 	@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
@@ -55,7 +66,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), jwtAccessTokenConverter()));
+		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
 		endpoints
 				.tokenEnhancer(tokenEnhancerChain)
 				.tokenStore(tokenStore())
@@ -82,12 +93,24 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	}
 
 	@Bean
-	public JwtAccessTokenConverter jwtAccessTokenConverter() {
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("tutorialjwt.jks"), "rahasia123".toCharArray())
-				.getKeyPair("tutorialjwt");
-		converter.setKeyPair(keyPair);
-		return converter;
-	}
+    public JwtAccessTokenConverter accessTokenConverter() {
+        Map<String, String> customHeaders = Collections.singletonMap("kid", JWK_KID);
+        return new JwtCustomHeadersAccessTokenConverter(customHeaders, keyPair());
+    }
 
+	
+	@Bean
+    public KeyPair keyPair() {
+        ClassPathResource ksFile = new ClassPathResource(KEY_STORE_FILE);
+        KeyStoreKeyFactory ksFactory = new KeyStoreKeyFactory(ksFile, KEY_STORE_PASSWORD.toCharArray());
+        return ksFactory.getKeyPair(KEY_ALIAS);
+    }
+	
+	@Bean
+    public JWKSet jwkSet() {
+        RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic()).keyUse(KeyUse.SIGNATURE)
+            .algorithm(JWSAlgorithm.RS256)
+            .keyID(JWK_KID);
+        return new JWKSet(builder.build());
+    }
 }

@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ProdukService } from '../service/produk.service';
 import { CookieModule } from 'ngx-cookie';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../service/TokenInterceptor';
 
 
 @NgModule({
@@ -19,6 +21,10 @@ import { CookieModule } from 'ngx-cookie';
     MatIconModule,
     MatInputModule,
     CookieModule.forRoot()
-  ], providers:[ProdukService]
+  ], providers:[ProdukService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }]
 })
 export class CartListModule { }

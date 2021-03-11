@@ -20,7 +20,7 @@ import com.firstproject.authserver.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",maxAge = 3600)
 public class UserController {
 
 	@Autowired

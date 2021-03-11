@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.firstproject.authserver.exception.LoginException;
 import com.firstproject.authserver.model.dto.MyUserPrincipal;
 import com.firstproject.authserver.model.entity.User;
 import com.firstproject.authserver.repository.UserRepository;

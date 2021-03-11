@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -26,7 +24,6 @@ public class UserNotif {
 	private String username;
 	private String email;
 	private String action;
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "expired_date")
 	private Date expiredDate;
 	

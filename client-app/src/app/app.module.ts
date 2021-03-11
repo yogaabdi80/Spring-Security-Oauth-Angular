@@ -14,7 +14,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { AddProdukComponent } from './add-produk/add-produk.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ import { AuthGuardService } from './service/auth-guard.service';
 import { CookieModule } from 'ngx-cookie';
 import { NotifPageComponent } from './notif-page/notif-page.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { TokenInterceptor } from './service/TokenInterceptor';
 
 const ANGULAR_MATERIAL = [
   MatBadgeModule,
@@ -56,6 +57,10 @@ const ANGULAR_MATERIAL = [
   providers: [AuthGuardService,PathLocationStrategy,{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
+  }, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
   }],
   bootstrap: [AppComponent]
 })

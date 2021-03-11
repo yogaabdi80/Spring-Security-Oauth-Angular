@@ -1,9 +1,8 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Response } from '../login/login.component';
-import { ApiResponse, Token } from '../model/response';
+import { ApiResponse } from '../model/response';
 import { UserInfo, UserRegister } from '../model/user';
 
 @Injectable({
@@ -11,7 +10,7 @@ import { UserInfo, UserRegister } from '../model/user';
 })
 export class UserService {
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient) { }
 
   private readonly baseUrl = "/auth/server/user/"
   private readonly baseUrlInfo = "/resource/server/api/user/"
@@ -21,17 +20,13 @@ export class UserService {
   }
 
   public verifEmail(id: string): Observable<Response<any>> {
-    console.log(id)
     let formdata: FormData = new FormData();
     formdata.append("id", id);
     return this.http.post<Response<any>>(this.baseUrl + "verify-email", formdata);
   }
 
   public getUserInfo(idUser: string): Observable<UserInfo> {
-    let params = {
-      "access_token": this.cookieService.get("token")
-    }
-    return this.http.get<UserInfo>(this.baseUrlInfo + "info/" + idUser, { params });
+    return this.http.get<UserInfo>(this.baseUrlInfo + "info/" + idUser);
   }
 
   public saveUser(user: UserInfo, foto: File): Observable<ApiResponse> {
@@ -40,31 +35,20 @@ export class UserService {
     formdata.append("userDto", new Blob([JSON.stringify(user)], {
       type: "application/json"
     }));
-    let params = {
-      "access_token": this.cookieService.get("token")
-    }
-    return this.http.post<ApiResponse>(this.baseUrlInfo + "saveUser", formdata, { params });
+    return this.http.post<ApiResponse>(this.baseUrlInfo + "saveUser", formdata);
   }
 
   public getProfil(id: String): Observable<HttpResponse<Blob>> {
-    let params = {
-      "access_token": this.cookieService.get("token")
-    }
     return this.http.get(this.baseUrlInfo + "getProfil/" + id, {
       observe: 'response',
-      responseType: 'blob',
-      params
+      responseType: 'blob'
     })
   }
 
   public getImage(filename: String): Observable<HttpResponse<Blob>> {
-    let params = {
-      "access_token": this.cookieService.get("token")
-    }
     return this.http.get(this.baseUrlInfo + "getGambarProfil/" + filename, {
       observe: 'response',
-      responseType: 'blob',
-      params
+      responseType: 'blob'
     })
   }
 
@@ -79,7 +63,6 @@ export class UserService {
     formdata.append("id", id);
     formdata.append("password", password);
     formdata.append("newPassword", newPassword);
-    formdata.append("access_token",this.cookieService.get("token"));
     return this.http.post<Response<any>>(this.baseUrl + "change-password", formdata);
   }
   public resetPassword(id: string, password: string): Observable<Response<any>> {

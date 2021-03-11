@@ -86,7 +86,7 @@ public class ApiUser {
 		mapper.map(userDto,user);
 		detail.setUser(user);
 		detailRepo.save(detail);
-		return new ApiResponse("Berhasil Disimpan", 200, null);
+		return new ApiResponse<>("Berhasil Disimpan", 200, null);
 	}
 
 	@GetMapping("/getProfil/{id}")

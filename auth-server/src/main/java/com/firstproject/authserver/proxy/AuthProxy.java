@@ -20,7 +20,7 @@ public interface AuthProxy {
 	public ResponseEntity<String> login(@RequestParam(value = "username") String username,
 			@RequestParam(value = "password") String password);
 
-	@Headers("Content-Type: application/x-www-form-urlencoded")
+	@Headers("Content-Type: multipart/form-data")
 	@PostMapping("/oauth/token")
 	public TokenResp getToken(@RequestHeader(value = "Authorization") String auth,
 			@RequestParam(value = "grant_type") String grant_type, @RequestParam(value = "code") String code,

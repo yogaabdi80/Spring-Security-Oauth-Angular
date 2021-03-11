@@ -48,7 +48,7 @@ public class UserService {
 
 	private static final String basicAuthCode = "Basic Y2xpZW50YXV0aGNvZGU6YWJjZA==";
 	private static final String grantType = "authorization_code";
-	private static final String redirectUrl = "http://localhost:4200";
+	private static final String redirectUrl = "http://localhost";
 
 	@Autowired
 	private UserRepository repo;
@@ -155,9 +155,9 @@ public class UserService {
 		try {
 			UserNotif userNotif = notifRepo.findByIdUserAndAction(id, verifNotifUser);
 			if (userNotif != null) {
-				if (!userNotif.getExpiredDate().after(new Date(Calendar.getInstance().getTimeInMillis()))) {
+				User user = repo.findById(id).get();
+				if (userNotif.getExpiredDate().after(new Date(Calendar.getInstance().getTimeInMillis()))) {
 					repo.setEnabled(id, true);
-					User user = repo.findById(id).get();
 					Cart cart = new Cart();
 					cart.setUserCart(user);
 					cartRepo.save(cart);
@@ -166,7 +166,8 @@ public class UserService {
 					detailRepo.save(detail);
 				} else {
 					notifRepo.delete(userNotif);
-					return new Response<Object>("Waktu sudah habis, harap verifikasi ulang!", warningStatus, null);
+					repo.delete(user);
+					return new Response<Object>("Waktu sudah habis, harap registrasi ulang!", warningStatus, null);
 				}
 			} else {
 				return new Response<Object>("User tidak ditemukan!", warningStatus, null);

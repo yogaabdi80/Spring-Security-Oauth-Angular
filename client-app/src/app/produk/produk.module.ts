@@ -11,9 +11,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ProdukService } from '../service/produk.service';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
 import { CookieModule } from 'ngx-cookie';
+import { TokenInterceptor } from '../service/TokenInterceptor';
 
 
 @NgModule({
@@ -32,7 +33,11 @@ import { CookieModule } from 'ngx-cookie';
     CookieModule.forRoot()
   ], providers: [
     ProdukService,
-    AuthService
+    AuthService, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ]
 })
 export class ProdukModule { }

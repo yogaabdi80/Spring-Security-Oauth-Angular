@@ -19,6 +19,7 @@ import com.firstproject.resourceserver.model.dto.UploadFile;
 public class StorageService {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+//	private final Path url=Paths.get("src/main/resources/upload-dir");
 	private final Path rootLocation = Paths.get("upload-dir");
 	
 	public void store(List<UploadFile> uploadFiles,String pointer) {
@@ -38,6 +39,7 @@ public class StorageService {
 	}
 	
 	public File loadFile(String filename, String pointer) {
+//		System.out.println(rootLocation);
 		try {			
 			File file;
 			file = rootLocation.resolve(pointer+"/"+filename).toFile();

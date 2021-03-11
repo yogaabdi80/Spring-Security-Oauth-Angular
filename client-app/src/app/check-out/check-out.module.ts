@@ -5,6 +5,8 @@ import { CheckOutRoutingModule } from './check-out-routing.module';
 import { CheckOutComponent } from './check-out.component';
 import { ProdukService } from '../service/produk.service';
 import { CookieModule } from 'ngx-cookie';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../service/TokenInterceptor';
 
 
 @NgModule({
@@ -13,6 +15,10 @@ import { CookieModule } from 'ngx-cookie';
     CommonModule,
     CheckOutRoutingModule,
     CookieModule.forRoot()
-  ], providers: [ProdukService]
+  ], providers: [ProdukService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }]
 })
 export class CheckOutModule { }

@@ -51,6 +51,7 @@ export class DefaultLayoutComponent implements OnInit {
     } else {
       if (this.code) {
         this.authService.getToken(this.code).subscribe(data => {
+          // console.log(data)
           if (data.status === 200) {
             this.userInfo = jwt_decode(data.objek.access_token);
             let date: Date = new Date();

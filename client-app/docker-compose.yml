@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+   java-network:
+      name: java-network
+
+services:
+  postgres-app:
+    container_name: postgres-app
+    image: postgres:12.6-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 1234:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db_first_project
+    networks:
+      - java-network
+  auth-server:
+      container_name: auth-server
+      image: auth-server:1.0
+      ports:
+         - 8081:8081
+      depends_on:
+         - postgres-app
+      networks:
+         - java-network
+  resource-server:
+      container_name: resource-server
+      image: resource-server:1.0
+      ports:
+         - 8080:8080
+      depends_on:
+         - postgres-app
+      networks:
+         - java-network
+  client-app:
+      container_name: client-app
+      image: client-app:1.0
+      ports:
+         - 80:80
+      depends_on:
+         - auth-server
+         - resource-server
+      networks:
+         - java-network
+
+volumes:
+  postgres-data:

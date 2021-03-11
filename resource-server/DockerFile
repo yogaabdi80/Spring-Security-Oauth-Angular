@@ -1,0 +1,8 @@
+FROM openjdk:8-jre-alpine3.9
+
+WORKDIR /src
+
+COPY target/resource-server-0.0.1-SNAPSHOT.jar /src/resource-server-0.0.1-SNAPSHOT.jar
+COPY upload-dir src/upload-dir
+
+CMD ["java", "-jar", "/src/resource-server-0.0.1-SNAPSHOT.jar"]

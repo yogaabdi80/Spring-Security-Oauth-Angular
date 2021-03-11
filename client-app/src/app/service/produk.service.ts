@@ -10,7 +10,7 @@ import { ApiResponse } from '../model/response';
 })
 export class ProdukService {
 
-  constructor(private http: HttpClient,private cookieService: CookieService) { }
+  constructor(private http: HttpClient) { }
 
   private baseUrl = "/resource/server/api/produk/";
 
@@ -20,7 +20,7 @@ export class ProdukService {
   public loading$ = this.loading.asObservable();
 
   setLoadingScreen(bool:boolean){
-    console.log(this.loading);
+    // console.log(this.loading);
     this.loading.next(bool);
   }
 
@@ -30,8 +30,7 @@ export class ProdukService {
 
   getJumlahCart(idCart:number): Observable<number> {
     let params={
-      "idCart":idCart.toString(),
-      "access_token":this.cookieService.get("token")
+      "idCart":idCart.toString()
     }
     return this.http.get<number>(this.baseUrl + "cartNotif",{ params: params });
   }
@@ -68,10 +67,7 @@ export class ProdukService {
     formdata.append("produk", new Blob([JSON.stringify(produk)], {
       type: "application/json"
     }));
-    let params={
-      "access_token":this.cookieService.get("token")
-    }
-    return this.http.post<ApiResponse>(this.baseUrl + "addProduk", formdata, { params: params });
+    return this.http.post<ApiResponse>(this.baseUrl + "addProduk", formdata);
   }
 
   addCart(idProduk:string,idCart:number,jumlahItem:string): Observable<ApiResponse> {
@@ -79,10 +75,7 @@ export class ProdukService {
     formdata.append("idProduk", idProduk);
     formdata.append("idCart", idCart.toString());
     formdata.append("jumlahItem", jumlahItem);
-    let params={
-      "access_token":this.cookieService.get("token")
-    }
-    return this.http.post<ApiResponse>(this.baseUrl + "addCart", formdata, { params: params });
+    return this.http.post<ApiResponse>(this.baseUrl + "addCart", formdata);
   }
 
   checkCart(cartDTOList: Array<CartDTO>,idCart:number): Observable<ApiResponse> {
@@ -91,15 +84,11 @@ export class ProdukService {
     formdata.append("cartDTOList", new Blob([JSON.stringify(cartDTOList)], {
       type: "application/json"
     }));
-    let params={
-      "access_token":this.cookieService.get("token")
-    }
-    return this.http.post<ApiResponse>(this.baseUrl + "checkCartList", formdata, { params: params });
+    return this.http.post<ApiResponse>(this.baseUrl + "checkCartList", formdata);
   }
 
   getCart(idCart:number): Observable<CartDTOList> {
     let params={
-      "access_token":this.cookieService.get("token"),
       "idCart": idCart.toString()
     }
     return this.http.get<CartDTOList>(this.baseUrl + "getCart", { params: params });
@@ -107,7 +96,6 @@ export class ProdukService {
 
   deleteCart(id:number,idCart:number){
     let params={
-      "access_token":this.cookieService.get("token"),
       "id":id.toString(),
       "idCart": idCart.toString()
     }

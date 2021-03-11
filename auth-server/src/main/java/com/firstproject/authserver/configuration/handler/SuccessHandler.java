@@ -26,6 +26,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         response.setCharacterEncoding("UTF-8");
 		writer.print(stringJson);
 		writer.flush();
+//		System.out.println("/oauth2/authorization/clientauthcode");
 	}
 
 }
