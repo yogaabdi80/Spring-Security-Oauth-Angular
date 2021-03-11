@@ -48,7 +48,7 @@ public class UserService {
 
 	private static final String basicAuthCode = "Basic Y2xpZW50YXV0aGNvZGU6YWJjZA==";
 	private static final String grantType = "authorization_code";
-	private static final String redirectUrl = "http://localhost";
+	private static final String redirectUrl = "http://localhost:4200";
 
 	@Autowired
 	private UserRepository repo;

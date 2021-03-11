@@ -69,7 +69,7 @@ public class Oauth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
 //		System.out.println("/oauth2/authorization/clientauthcode");
 
-		this.redirectStrategy.sendRedirect(request, response, "oauth2/authorization/clientauthcode");
+		this.redirectStrategy.sendRedirect(request, response, "/oauth2/authorization/clientauthcode");
 
 	}
 }
