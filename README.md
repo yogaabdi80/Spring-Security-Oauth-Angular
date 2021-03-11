@@ -14,4 +14,4 @@ clientauthcode:abcd
 
 
 Note :
-Sebelum menjalankan aplikasi harap merubah host menjadi localhost, karena default di setting hostnya sesuai nama docker container
+Sebelum menjalankan aplikasi harap merubah host menjadi localhost, karena default disetting hostnya sesuai nama docker container
